@@ -24,20 +24,47 @@ struct ContentView: View {
                     .rotationEffect(.degrees(rotation))
                     .rotation3DEffect(.degrees(rotation), axis: (x: 1, y: 1, z: 0))
                     .padding (50)
-                CustomText(text: "Turn Score: \(turnScore)")
-                CustomText(text: "Game Score: \(gameScore)")
-                Spacer()
-               
                 CustomText (text: "Turn Score: \(turnScore)")
                 HStack {
                     Button ("Roll") {
+                        chooseRandom(times: 3)
+                        withAnimation(.interpolatingSpring(stiffness:10, damping: 2)) {
+                            rotation += 360
+                        }
                     }
                     .buttonStyle(CustomButtonStyle())
                     Button ("Hold") {
+                        gameScore += turnScore
+                        endTurn()
+                        withAnimation(.easeInOut(duration: 1)) {
+                            rotation += 360
+                        }
                     }
                     .buttonStyle(CustomButtonStyle())
                 }
                 CustomText (text: "Game Score: \(gameScore)")
+            }
+        }
+    }
+    func endTurn () {
+        turnScore = 0
+        randomValue = 0
+    }
+    func chooseRandom(times: Int) {
+        if times > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                randomValue = Int.random(in: 1...6)
+                chooseRandom(times: times - 1)
+            }
+        }
+        if times == 0 {
+            if randomValue == 1 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    endTurn()
+                }
+            }
+            else {
+                turnScore += randomValue
             }
         }
     }
