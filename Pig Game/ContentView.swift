@@ -27,10 +27,22 @@ struct ContentView: View {
                 CustomText(text: "Turn Score: \(turnScore)")
                 CustomText(text: "Game Score: \(gameScore)")
                 Spacer()
+               
+                CustomText (text: "Turn Score: \(turnScore)")
+                HStack {
+                    Button ("Roll") {
+                    }
+                    .buttonStyle(CustomButtonStyle())
+                    Button ("Hold") {
+                    }
+                    .buttonStyle(CustomButtonStyle())
+                }
+                CustomText (text: "Game Score: \(gameScore)")
             }
         }
     }
 }
+
 
 #Preview {
     ContentView()
@@ -39,5 +51,16 @@ struct CustomText: View {
     let text: String
     var body: some View {
         Text(text).font(Font.custom("Marker Felt", size: 36))
+    }
+}
+struct CustomButtonStyle: ButtonStyle {
+    func makeBody (configuration: Configuration) -> some View {
+        configuration.label
+            .frame (width: 50)
+            .font(Font.custom("Marker Felt", size: 24))
+            .padding()
+            .background(.red).opacity(configuration.isPressed ? 0.0 : 1.0)
+            .foregroundColor(.white)
+            .clipShape (RoundedRectangle (cornerRadius: 10))
     }
 }
